@@ -1,0 +1,33 @@
+/* General styling for day and night themes */
+.app-container.day {
+    background: linear-gradient(to right, #ffecd2, #fcb69f);
+    color: #000;
+    transition: background 0.5s ease;
+  }
+  
+  .app-container.night {
+    background: linear-gradient(to right, #232526, #414345);
+    color: #fff;
+    transition: background 0.5s ease;
+  }
+  
+  /* Simple fade-in animation */
+  .fade-in {
+    animation: fadeInAnimation 1.5s ease-in;
+  }
+  
+  @keyframes fadeInAnimation {
+    0% { opacity: 0; transform: translateY(-10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Button hover effect */
+  .btn-animate {
+    transition: transform 0.3s ease;
+  }
+  .btn-animate:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Additional styling can be added to match the reference design */
+  

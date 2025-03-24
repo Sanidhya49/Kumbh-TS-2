@@ -1,0 +1,15 @@
+# Ignore node_modules for frontend
+frontend/node_modules/
+
+.venv
+
+# Ignore virtual environment for backend
+backend/venv/
+
+# Ignore Python cache files
+*.pyc
+__pycache__/
+
+# Optionally ignore other files/folders
+.DS_Store
+.env
