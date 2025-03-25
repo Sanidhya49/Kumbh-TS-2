@@ -4,6 +4,8 @@ import Signup from './components/Signup';
 import Login from './components/Login';
 import JourneyForm from './components/JourneyForm';
 import ProfileEdit from './components/ProfileEdit';
+// import { VehicleAnimation } from './components/VehicleAnimation'; 
+
 
 function App() {
   const [theme, setTheme] = useState('day'); // 'day' or 'night'
