@@ -4,6 +4,9 @@ import Signup from './components/Signup';
 import Login from './components/Login';
 import JourneyForm from './components/JourneyForm';
 import ProfileEdit from './components/ProfileEdit';
+import logo from './assets/umbh-ts.png'
+import { IoMdMoon } from "react-icons/io";
+import { IoSunny } from "react-icons/io5";
 
 function App() {
   const [theme, setTheme] = useState('day'); // 'day' or 'night'
@@ -14,12 +17,12 @@ function App() {
 
   return (
     <Router>
-      <div className={`app-container ${theme}`}>
+      <div className={theme === "day" ? "bg-day" : "bg-night"}>
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
           <div className="container-fluid">
-            <Link className="navbar-brand" to="/">Vehicle Reg</Link>
-            <button className="btn btn-outline-secondary" onClick={toggleTheme}>
-              Toggle {theme === 'day' ? 'Night' : 'Day'} Mode
+            <Link className="navbar-brand" to="/"><img src={logo} width="150px" alt="Logo" /></Link>
+            <button className="btn btn-svg" onClick={toggleTheme}>
+              {theme === 'day' ? <IoMdMoon /> : <IoSunny/>} 
             </button>
             <div className="collapse navbar-collapse">
               <ul className="navbar-nav ms-auto mb-2 mb-lg-0">

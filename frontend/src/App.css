@@ -1,16 +1,26 @@
-/* General styling for day and night themes */
-.app-container.day {
-    background: linear-gradient(to right, #ffecd2, #fcb69f);
-    color: #000;
-    transition: background 0.5s ease;
-  }
-  
-  .app-container.night {
-    background: linear-gradient(to right, #232526, #414345);
-    color: #fff;
-    transition: background 0.5s ease;
-  }
-  
+html, body {
+  height: 100%;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.bg-day {
+  background: linear-gradient(to right, #ffecd2, #fcb69f);
+  color: #000;
+  transition: background 0.5s ease;
+  min-height: 100vh; 
+}
+
+.bg-night {
+  background: linear-gradient(to right, #232526, #414345);
+  color: #fff;
+  transition: background 0.5s ease;
+  min-height: 100vh;
+}
+
   /* Simple fade-in animation */
   .fade-in {
     animation: fadeInAnimation 1.5s ease-in;
@@ -31,3 +41,6 @@
   
   /* Additional styling can be added to match the reference design */
   
+  .btn svg { font-size: 24px; color: #fcb69f;}
+  .btn svg:hover{color: #414345;}
+button:focus{border: none; color: #fcb69f;}
