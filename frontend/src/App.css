@@ -1,6 +1,18 @@
-html, body {
+html,
+body {
   height: 100%;
+  overflow-x: hidden;
+  max-width: 100%;
 }
+body,
+html,
+#root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -11,7 +23,7 @@ html, body {
   background: linear-gradient(to right, #ffecd2, #fcb69f);
   color: #000;
   transition: background 0.5s ease;
-  min-height: 100vh; 
+  min-height: 100vh;
 }
 
 .bg-night {
@@ -21,26 +33,58 @@ html, body {
   min-height: 100vh;
 }
 
-  /* Simple fade-in animation */
-  .fade-in {
-    animation: fadeInAnimation 1.5s ease-in;
+.fade-in {
+  animation: fadeInAnimation 1.5s ease-in;
+}
+
+@keyframes fadeInAnimation {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
   }
-  
-  @keyframes fadeInAnimation {
-    0% { opacity: 0; transform: translateY(-10px); }
-    100% { opacity: 1; transform: translateY(0); }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  /* Button hover effect */
-  .btn-animate {
-    transition: transform 0.3s ease;
-  }
-  .btn-animate:hover {
-    transform: scale(1.05);
-  }
-  
-  /* Additional styling can be added to match the reference design */
-  
-  .btn svg { font-size: 24px; color: #fcb69f;}
-  .btn svg:hover{color: #414345;}
-button:focus{border: none; color: #fcb69f;}
+}
+
+.btn-animate {
+  transition: transform 0.3s ease;
+}
+.btn-animate:hover {
+  transform: scale(1.05);
+}
+
+.btn svg {
+  font-size: 24px;
+  color: #fcb69f;
+}
+.btn svg:hover {
+  color: #414345;
+}
+button:focus {
+  border: none;
+  color: #fcb69f;
+}
+
+.side img {
+  margin-right: 20px;
+  margin-bottom: 10px;
+  border-radius: 15px;
+}
+
+.navbar li {
+  font-weight: 700;
+}
+.navbar {
+  background-color: #ffffff90;
+}
+.bg-night .navbar {
+  background-color: #ffffffDD;
+}
+
+.sidecol {padding-left: 40px;}
+.home h1{font-size: 32px; color: #3a0e02; margin-bottom: 15px;}
+.home .mainheading h1{font-size: 45px; color: #996762; margin-bottom: 10px;}
+.subheading h1{font-size: 25px; color: #6d7579dd; margin-bottom: 10px;}
+.home p{font-size: 18px; margin-top: 20px; font-weight: 400; color: #6d7579cc;}
