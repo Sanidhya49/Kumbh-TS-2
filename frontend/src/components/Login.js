@@ -31,34 +31,40 @@ function Login() {
   };
   
   return (
-    <div className="fade-in">
-      <h3>Driver Login</h3>
-      {message && <Alert variant="info">{message}</Alert>}
-      <Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3" controlId="loginLicense">
-          <Form.Label>License Number</Form.Label>
-          <Form.Control 
-            type="text" 
-            name="license" 
-            placeholder="Enter license number" 
-            onChange={handleChange} 
-            required 
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="loginContact">
-          <Form.Label>Registered Contact Number</Form.Label>
-          <Form.Control 
-            type="text" 
-            name="contact" 
-            placeholder="Enter contact number" 
-            onChange={handleChange} 
-            required 
-          />
-        </Form.Group>
-        <Button variant="primary" type="submit" className="btn-animate">
-          Log In
-        </Button>
-      </Form>
+    <div className="signup-container fade-in">
+      <div className="signup-form-wrapper">
+        <h3>Driver Login</h3>
+        {message && <Alert variant="info">{message}</Alert>}
+        <Form onSubmit={handleSubmit}>
+          <Form.Group className="mb-3 form-group" controlId="loginLicense">
+            <Form.Label>License Number</Form.Label>
+            <Form.Control 
+              type="text" 
+              name="license" 
+              placeholder="Enter license number" 
+              onChange={handleChange} 
+              required 
+            />
+          </Form.Group>
+          <Form.Group className="mb-3 form-group" controlId="loginContact">
+            <Form.Label>Registered Contact Number</Form.Label>
+            <Form.Control 
+              type="text" 
+              name="contact" 
+              placeholder="Enter contact number" 
+              onChange={handleChange} 
+              required 
+            />
+          </Form.Group>
+          <Button 
+            variant="primary" 
+            type="submit" 
+            className="btn-submit btn-animate"
+          >
+            Log In
+          </Button>
+        </Form>
+      </div>
     </div>
   );
 }

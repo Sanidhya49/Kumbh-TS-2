@@ -60,57 +60,63 @@ function JourneyForm() {
   };
 
   return (
-    <div className="fade-in">
-      <h3>Plan Your Journey</h3>
-      {message && <Alert variant="success">{message}</Alert>}
-      <Form onSubmit={handleSubmit}>
-        {/* If license is not set via localStorage, show an input field */}
-        {!journey.license && (
-          <Form.Group className="mb-3" controlId="journeyLicense">
-            <Form.Label>Your License Number</Form.Label>
-            <Form.Control 
-              type="text" 
-              name="license" 
-              placeholder="Enter your license number" 
-              onChange={handleChange} 
-              required 
-            />
+    <div className="signup-container fade-in">
+      <div className="signup-form-wrapper">
+        <h3>Plan Your Journey</h3>
+        {message && <Alert variant="success">{message}</Alert>}
+        <Form onSubmit={handleSubmit}>
+          {/* If license is not set via localStorage, show an input field */}
+          {!journey.license && (
+            <Form.Group className="mb-3 form-group" controlId="journeyLicense">
+              <Form.Label>Your License Number</Form.Label>
+              <Form.Control 
+                type="text" 
+                name="license" 
+                placeholder="Enter your license number" 
+                onChange={handleChange} 
+                required 
+              />
+            </Form.Group>
+          )}
+          <Form.Group className="mb-3 form-group" controlId="journeyDestination">
+            <Form.Label>Where to Go</Form.Label>
+            <Form.Select name="destination" onChange={handleChange} required>
+              <option value="">Select destination</option>
+              {destinations.map((dest, idx) => (
+                <option key={idx} value={dest.value}>{dest.label}</option>
+              ))}
+            </Form.Select>
           </Form.Group>
-        )}
-        <Form.Group className="mb-3" controlId="journeyDestination">
-          <Form.Label>Where to Go</Form.Label>
-          <Form.Select name="destination" onChange={handleChange} required>
-            <option value="">Select destination</option>
-            {destinations.map((dest, idx) => (
-              <option key={idx} value={dest.value}>{dest.label}</option>
-            ))}
-          </Form.Select>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="journeyFromState">
-          <Form.Label>From Where (State)</Form.Label>
-          <Form.Select name="fromState" onChange={handleChange} required>
-            <option value="">Select state</option>
-            {states.map((state, idx) => (
-              <option key={idx} value={state}>{state}</option>
-            ))}
-          </Form.Select>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="journeyStartDate">
-          <Form.Label>Journey Start Date</Form.Label>
-          <Form.Control type="date" name="startDate" onChange={handleChange} required />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="journeyEndDate">
-          <Form.Label>Journey End Date</Form.Label>
-          <Form.Control type="date" name="endDate" onChange={handleChange} required />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="journeyPassengers">
-          <Form.Label>Number of Passengers</Form.Label>
-          <Form.Control type="number" name="passengers" min="1" onChange={handleChange} required />
-        </Form.Group>
-        <Button variant="primary" type="submit" className="btn-animate">
-          Submit Journey
-        </Button>
-      </Form>
+          <Form.Group className="mb-3 form-group" controlId="journeyFromState">
+            <Form.Label>From Where (State)</Form.Label>
+            <Form.Select name="fromState" onChange={handleChange} required>
+              <option value="">Select state</option>
+              {states.map((state, idx) => (
+                <option key={idx} value={state}>{state}</option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+          <Form.Group className="mb-3 form-group" controlId="journeyStartDate">
+            <Form.Label>Journey Start Date</Form.Label>
+            <Form.Control type="date" name="startDate" onChange={handleChange} required />
+          </Form.Group>
+          <Form.Group className="mb-3 form-group" controlId="journeyEndDate">
+            <Form.Label>Journey End Date</Form.Label>
+            <Form.Control type="date" name="endDate" onChange={handleChange} required />
+          </Form.Group>
+          <Form.Group className="mb-3 form-group" controlId="journeyPassengers">
+            <Form.Label>Number of Passengers</Form.Label>
+            <Form.Control type="number" name="passengers" min="1" onChange={handleChange} required />
+          </Form.Group>
+          <Button 
+            variant="primary" 
+            type="submit" 
+            className="btn-submit btn-animate"
+          >
+            Submit Journey
+          </Button>
+        </Form>
+      </div>
     </div>
   );
 }
