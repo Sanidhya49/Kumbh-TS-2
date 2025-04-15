@@ -7,7 +7,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     contact = db.Column(db.String(20), nullable=False)
-    email = db.Column(db.String(120))
+    email = db.Column(db.String(120), nullable=False)
     aadhaar = db.Column(db.String(20), nullable=False)
     license = db.Column(db.String(50), unique=True, nullable=False)
     carType = db.Column(db.String(50), nullable=False)

@@ -3,10 +3,14 @@ from flask_cors import CORS
 from config import Config
 from models import db, User, Journey
 from datetime import datetime
+import os
+from flask_mail import Mail, Message # type: ignore
 
 app = Flask(__name__)
 app.config.from_object(Config)
 CORS(app)
+db.init_app(app)
+mail = Mail(app)
 
 db.init_app(app)
 
@@ -75,8 +79,7 @@ def plan_journey():
     user = User.query.filter_by(license=user_license).first()
     if not user:
         return jsonify({"message": "User not found."}), 404
-    
-    # Check if a journey already exists and hasn't ended.
+
     existing = Journey.query.filter_by(user_id=user.id).order_by(Journey.start_date.desc()).first()
     if existing and existing.end_date >= datetime.today().date():
         return jsonify({"message": "You already have an ongoing journey."}), 400
@@ -91,7 +94,27 @@ def plan_journey():
     )
     db.session.add(journey)
     db.session.commit()
-    return jsonify({"message": "Journey planned successfully!"}), 201
+
+    if user.email:
+        msg = Message(
+            subject="Journey Booking Confirmation",
+            recipients=[user.email]
+        )
+
+        msg.body = (
+            f"Hello {user.name},\n\n"
+            f"Your journey from {data.get('fromState')} to {data.get('destination')} has been successfully booked.\n"
+            f"Start Date: {data.get('startDate')}\n"
+            f"End Date: {data.get('endDate')}\n"
+            f"Passengers: {data.get('passengers')}\n\n"
+            "Thank you for using KUMBH-TS!"
+        )
+        try:
+            mail.send(msg)
+        except Exception as e:
+            print(f"Error sending email: {e}")
+    
+    return jsonify({"message": "Journey planned successfully and confirmation email sent!"}), 201
 
 # Endpoint for profile editing (example)
 @app.route('/api/profile', methods=['POST'])
