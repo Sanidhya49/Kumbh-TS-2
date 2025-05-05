@@ -1,0 +1,444 @@
+/* Import amazing fonts */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@300;400;500&display=swap');
+
+html,
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  font-family: 'Montserrat', sans-serif;
+}
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Animated gradient backgrounds for day and night */
+.bg-day {
+  background: linear-gradient(-45deg, #ffecd2, #fcb69f, #ffecd2, #fcb69f);
+  background-size: 400% 400%;
+  animation: gradientAnimation 15s ease infinite;
+  color: #000;
+  transition: background 0.5s ease;
+  min-height: 100vh;
+}
+
+.bg-night {
+  background: linear-gradient(-45deg, #232526, #414345, #232526, #414345);
+  background-size: 400% 400%;
+  animation: gradientAnimation 15s ease infinite;
+  color: #fff;
+  transition: background 0.5s ease;
+  min-height: 100vh;
+}
+
+/* background gradient animation */
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.fade-in {
+  animation: fadeInAnimation 1.5s ease-in;
+}
+
+@keyframes fadeInAnimation {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Button hover animation */
+.btn-animate {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.btn-animate:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Icon animation on hover */
+.btn svg {
+  font-size: 24px;
+  transition: color 0.3s ease;
+}
+.btn svg:hover {
+  color: #414345;
+}
+
+/* Navbar Styling */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 15px 40px;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.5s ease, box-shadow 0.5s ease;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  backdrop-filter: blur(6px);
+}
+
+.navbar:hover{
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.bg-night .navbar:hover{
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.08)
+}
+
+.navbar.transparent {
+  /* background-color: rgba(255, 255, 255, 0.05); */
+  /* box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1); */
+}
+
+/* On scrolling */
+.navbar.scrolled {
+  /* background-color: rgba(255, 255, 255, 0.85); */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Night mode scroll background */
+.bg-night .navbar.scrolled {
+  /* background-color: rgba(20, 20, 20, 0.9); */
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.08);
+}
+
+/* Navbar links */
+.navbar a {
+  color: #000000;
+  text-decoration: none;
+  margin: 0 15px;
+  /* padding-right: 100px; */
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+.bg-night .navbar a {
+  color: #eee;
+}
+
+.navbar a:hover {
+  color: #ff7b54;
+}
+
+/* Logo styling */
+.navbar .logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: #222;
+}
+
+.bg-night .navbar .logo {
+  color: #f0f0f0;
+}
+
+
+/* Image Css */
+.side img {
+  margin: 0 20px 10px 0;
+  border-radius: 15px;
+  transition: transform 0.4s ease;
+}
+.side img:hover {
+  transform: scale(1.03);
+}
+
+
+.sidecol {
+  padding-left: 40px;
+}
+
+
+.home h1 {
+  font-size: 32px;
+  color: #3a0e02;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+.home .mainheading h1 {
+  font-size: 45px;
+  color: #996762;
+  margin-bottom: 10px;
+  font-family: 'Roboto', sans-serif;
+}
+.subheading h1 {
+  font-size: 25px;
+  color: #6d7579;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+.home p {
+  font-size: 18px;
+  margin-top: 20px;
+  font-weight: 400;
+  color: #6d7579;
+}
+
+
+.btn.btn-svg {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+.btn.btn-svg:hover {
+  transform: rotate(20deg);
+  color: #fcb69f;
+}
+
+
+.image-cluster {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 20px 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.image-tile {
+  width: 250px;
+  height: 160px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+  transition: transform 0.6s ease, box-shadow 0.4s ease;
+  animation: floatImage 4s ease-in-out infinite;
+}
+
+.image-tile:nth-child(2) {
+  transform: translateY(-20px) rotate(-2deg);
+}
+.image-tile:nth-child(3) {
+  transform: translateY(20px) rotate(2deg);
+}
+.image-tile:nth-child(4) {
+  transform: scale(1.05) rotate(-1deg);
+}
+
+.image-tile:hover {
+  transform: scale(1.1) rotate(0deg);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+
+.image-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+@keyframes floatImage {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0px); }
+}
+
+
+/* Default scrollbar base */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+body.bg-day::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+body.bg-day::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #ff7b54, #ffb26b);
+  border-radius: 10px;
+}
+
+body.bg-night::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+body.bg-night::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #555, #aaa);
+  border-radius: 10px;
+}
+
+/* Add this to your CSS file */
+.navbar.sticky-top {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: background-color 0.3s ease;
+  background: #ffffff50;
+}
+
+.navbar.scrolled {
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: fixed;
+}
+
+.navbar.transparent {
+  background-color: transparent;
+}
+
+/* Theme-based styles */
+.bg-day {
+  background-color: #ffffff;
+  color: #333333;
+}
+
+.bg-night {
+  background-color: #1a1a2e;
+  color: #f0f0f0;
+}
+
+.bg-night .navbar.scrolled {
+  background-color: rgba(26, 26, 46, 0.95);
+}
+
+.bg-night .navbar .nav-link {
+  color: #f0f0f0;
+}
+
+.signup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  background-color: linear-gradient(180deg, #ff7b54, #ffb26b);
+}
+
+.signup-form-wrapper {
+  width: 50%;
+  max-width: 600px;
+  min-width: 320px;
+  background-color: var(--form-bg, white);
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.signup-form-wrapper h3 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: var(--heading-color, #333);
+  font-weight: 600;
+}
+
+.form-group label {
+  text-align: center;
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--label-color, #555);
+}
+
+.form-control, .form-select {
+  border-radius: 15px !important;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--input-border, #ddd);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--focus-color, #4a90e2);
+  box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.25);
+}
+
+.btn-submit {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 15px;
+  background-color: var(--btn-bg, #fcb69f90);
+  color: white;
+  font-weight: 500;
+  margin-top: 1.5rem;
+  transition: background-color 0.3s;
+  border: none;
+}
+
+.btn-submit:hover {
+  background-color: var(--btn-hover, #fcb69f);
+  border: none;
+}
+
+.file-input-label {
+  cursor: pointer;
+  border-radius: 15px;
+  padding: 0.75rem 1rem;
+  border: 1px dashed var(--file-border, #aaa);
+  display: block;
+  text-align: center;
+  background-color: var(--file-bg, #f8f9fa);
+  transition: background-color 0.3s;
+}
+
+.file-input-label:hover {
+  background-color: var(--file-hover, #e9ecef);
+}
+
+.file-input {
+  opacity: 0;
+  position: absolute;
+  z-index: -1;
+}
+
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+.bg-night .signup-form-wrapper {
+  background-color: #2a2a3e;
+  color: #f0f0f0;
+}
+
+.bg-night .form-control, 
+.bg-night .form-select {
+  background-color: #3a3a4e;
+  border-color: #555;
+  color: #f0f0f0;
+}
+
+.bg-night .form-group label {
+  color: #e0e0e0;
+}
+
+.bg-night .signup-form-wrapper h3 {
+  color: #f0f0f0;
+}
+
+.bg-night .file-input-label {
+  background-color: #3a3a4e;
+  border-color: #555;
+  color: #f0f0f0;
+}
