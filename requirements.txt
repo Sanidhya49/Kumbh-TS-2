@@ -1,9 +1,0 @@
-streamlit
-opencv-python-headless
-torch
-torchvision
-numpy
-Pillow
-roboflow
-ultralytics
-yolov5
