@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       });
 
       const responseData = await response.json();
-
+      
       if (!response.ok) {
         toast({
           title: "Login Failed",
@@ -67,7 +67,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         });
         return false;
       }
-
+      
       // Map backend fields to frontend User type
       const mappedUser = {
         id: responseData.user.id,
