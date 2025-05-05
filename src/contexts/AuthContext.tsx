@@ -57,43 +57,39 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         credentials: 'include',
       });
 
-      if (response.ok) {
-        // Fetch user profile after successful login
-        const userProfileRes = await fetch(`http://127.0.0.1:8000/api/users/me/`, {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-        });
-        if (userProfileRes.ok) {
-          const userData = await userProfileRes.json();
-          // Map backend fields to frontend User type
-          const mappedUser = {
-            id: userData.id,
-            fullName: `${userData.first_name} ${userData.last_name}`,
-            email: userData.email,
-            phone: userData.phone_number,
-            aadhaarNumber: userData.aadhar_number,
-            licenseNumber: userData.license_number,
-            role: userData.is_admin ? 'admin' as const : 'user' as const,
-            vehicles: [], // You can fetch vehicles separately if needed
-          };
-          setUser(mappedUser);
-          localStorage.setItem('kumbhTsUser', JSON.stringify(mappedUser));
-        }
-        toast({
-          title: "Login Successful",
-          description: `Welcome back!`
-        });
-        return true;
-      } else {
+      const responseData = await response.json();
+
+      if (!response.ok) {
         toast({
           title: "Login Failed",
-          description: "Invalid email or password.",
+          description: responseData.detail || "Invalid email or password.",
           variant: "destructive"
         });
         return false;
       }
+
+      // Map backend fields to frontend User type
+      const mappedUser = {
+        id: responseData.user.id,
+        fullName: `${responseData.user.first_name} ${responseData.user.last_name}`,
+        email: responseData.user.email,
+        phone: responseData.user.phone_number,
+        aadhaarNumber: responseData.user.aadhar_number,
+        licenseNumber: responseData.user.license_number,
+        role: responseData.user.is_admin ? 'admin' as const : 'user' as const,
+        vehicles: [], // You can fetch vehicles separately if needed
+      };
+      
+      setUser(mappedUser);
+      localStorage.setItem('kumbhTsUser', JSON.stringify(mappedUser));
+      
+      toast({
+        title: "Login Successful",
+        description: `Welcome back!`
+      });
+      return true;
     } catch (error) {
+      console.error('Login error:', error);
       toast({
         title: "Login Failed",
         description: "An error occurred while logging in.",

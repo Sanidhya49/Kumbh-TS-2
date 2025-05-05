@@ -7,11 +7,12 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
+    is_admin = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'first_name', 'last_name', 
-                 'aadhar_number', 'license_number', 'phone_number', 'password', 'password2')
+                 'aadhar_number', 'license_number', 'phone_number', 'password', 'password2', 'is_admin')
         extra_kwargs = {
             'password': {'write_only': True},
             'aadhar_number': {'required': True},
