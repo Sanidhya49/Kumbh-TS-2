@@ -1,5 +1,4 @@
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -11,8 +10,23 @@ import { VehicleList } from './VehicleList';
 import { DashcamUpload } from './DashcamUpload';
 
 export const UserDashboard = () => {
-  const { user } = useAuth();
+  const { user, fetchUserVehicles, setUser } = useAuth();
   const [activeTab, setActiveTab] = useState('profile');
+  
+  useEffect(() => {
+    if (activeTab === 'vehicles' && user) {
+      fetchUserVehicles().then(vehicles => {
+        console.log('Fetched vehicles:', vehicles); // Debug: see what is returned
+        // Only update if vehicles actually changed
+        if (JSON.stringify(user.vehicles) !== JSON.stringify(vehicles)) {
+          setUser({ ...user, vehicles });
+          localStorage.setItem('kumbhTsUser', JSON.stringify({ ...user, vehicles }));
+        }
+      });
+    }
+    // Remove 'user' from dependencies to avoid infinite loop
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab, fetchUserVehicles, setUser]);
   
   if (!user) return null;
   
