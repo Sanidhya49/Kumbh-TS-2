@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -7,12 +6,10 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { AlertTriangle } from 'lucide-react';
-import { mockRoutes } from '@/data/mockData';
 import { useToast } from '@/components/ui/use-toast';
 
-export const RouteManagement = () => {
+export const RouteManagement = ({ routes }) => {
   const { toast } = useToast();
-  const [routes, setRoutes] = useState(mockRoutes);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newRoute, setNewRoute] = useState({
     startLocation: '',
@@ -146,9 +143,7 @@ export const RouteManagement = () => {
                     <TableCell>{route.endLocation}</TableCell>
                     <TableCell className="text-right">{route.currentBookings}</TableCell>
                     <TableCell className="text-right">{route.totalCapacity}</TableCell>
-                    <TableCell className="text-right">
-                      {Math.floor((route.currentBookings / route.totalCapacity) * 100)}%
-                    </TableCell>
+                    <TableCell className="text-right">{Math.floor((route.currentBookings / route.totalCapacity) * 100)}%</TableCell>
                     <TableCell>
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStatusBadgeColor(route.trafficStatus)}`}>
                         {route.trafficStatus === 'high' && <AlertTriangle className="w-3 h-3 mr-1" />}

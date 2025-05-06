@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -119,14 +118,6 @@ export const LoginForm = () => {
           </Link>
         </p>
       </CardFooter>
-      <div className="px-6 pb-4">
-        <div className="text-xs text-gray-500 text-center mt-4">
-          <p>Demo credentials:</p>
-          <p>Regular user: rahul.sharma@example.com</p>
-          <p>Admin: admin@kumbh-ts.com</p>
-          <p>(Any password will work for demo)</p>
-        </div>
-      </div>
     </Card>
   );
 };

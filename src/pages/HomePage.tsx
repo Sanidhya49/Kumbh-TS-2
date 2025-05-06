@@ -1,4 +1,3 @@
-
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
@@ -44,7 +43,7 @@ export const HomePage = () => {
                     <Button
                       size="lg"
                       variant="outline"
-                      className="text-white border-white hover:bg-white/10"
+                      className="bg-white text-kumbh-blue border-kumbh-blue hover:bg-kumbh-blue hover:text-white hover:border-kumbh-blue"
                       onClick={() => navigate('/login')}
                     >
                       Login
@@ -59,26 +58,21 @@ export const HomePage = () => {
                   <div className="absolute -top-3 -left-3 bg-accent text-white text-xs px-2 py-1 rounded-full font-medium">
                     New
                   </div>
-                  <h3 className="text-xl font-semibold mb-4">Kumbh Mela 2025</h3>
+                  <h3 className="text-xl font-semibold mb-4">Kedarnath Yatra 2025</h3>
                   <p className="mb-4">
-                    Registration for Kumbh Mela 2025 is now open. Plan your journey with our traffic management system.
+                    Registration for Kedarnath Yatra 2025 is now open. Plan your journey with our traffic management system.
                   </p>
                   <div className="flex items-center space-x-1 text-sm mb-2">
                     <Calendar className="w-4 h-4" />
-                    <span>January 15 - February 25, 2025</span>
+                    <span>Opening Date: May 2, 2025, at 7:00 AM (Vrishabha Lagna)</span>
+                  </div>
+                  <div className="flex items-center space-x-1 text-sm mb-2">
+                    <Calendar className="w-4 h-4" />
+                    <span>Closing Date: October 23, 2025</span>
                   </div>
                   <div className="flex items-center space-x-1 text-sm">
                     <MapPin className="w-4 h-4" />
-                    <span>Prayagraj (Allahabad), Uttar Pradesh</span>
-                  </div>
-                </div>
-                
-                <div className="absolute -bottom-4 -right-4 bg-white/10 backdrop-blur-sm rounded-lg p-4 max-w-xs">
-                  <div className="flex items-start space-x-3">
-                    <AlertTriangle className="w-6 h-6 text-accent flex-shrink-0" />
-                    <p className="text-sm">
-                      Limited vehicle registrations available for popular routes. Register early to secure your spot.
-                    </p>
+                    <span>Location: Kedarnath, Rudraprayag District, Uttarakhand</span>
                   </div>
                 </div>
               </div>

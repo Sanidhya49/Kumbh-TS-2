@@ -1,26 +1,125 @@
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/contexts/AuthContext';
-import { mockRoutes, mockVideoAnalyses } from '@/data/mockData';
-import { TrafficStatus } from '@/types';
 import { TrafficOverview } from './TrafficOverview';
 import { RouteManagement } from './RouteManagement';
 import { VideoAnalysis } from './VideoAnalysis';
+import { mockVideoAnalyses } from '@/data/mockData';
+import { useToast } from '@/components/ui/use-toast';
 
 export const AdminDashboard = () => {
   const { user } = useAuth();
+  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('overview');
+  const [journeys, setJourneys] = useState([]);
+  const [routeStats, setRouteStats] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   
-  if (!user || user.role !== 'admin') return null;
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!user || user.role !== 'admin') {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:8000/api/journeys/', { 
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        let journeysArray = Array.isArray(data) ? data : (data.results || []);
+        setJourneys(journeysArray);
+
+        // Aggregate route stats
+        const routeMap = new Map();
+        journeysArray.forEach(j => {
+          const key = `${j.start_location}__${j.end_location}`;
+          if (!routeMap.has(key)) {
+            routeMap.set(key, {
+              id: key,
+              startLocation: j.start_location,
+              endLocation: j.end_location,
+              totalCapacity: 500,
+              currentBookings: 0,
+              trafficStatus: 'low',
+            });
+          }
+          routeMap.get(key).currentBookings++;
+        });
+
+        // Calculate traffic status
+        for (const route of routeMap.values()) {
+          const occupancy = route.currentBookings / route.totalCapacity;
+          if (occupancy > 0.9) route.trafficStatus = 'high';
+          else if (occupancy > 0.6) route.trafficStatus = 'moderate';
+          else route.trafficStatus = 'low';
+        }
+
+        setRouteStats(Array.from(routeMap.values()));
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching journeys:', err);
+        setError('Failed to load dashboard data. Please try again later.');
+        toast({
+          title: "Error",
+          description: "Failed to load dashboard data. Please try again later.",
+          variant: "destructive"
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [user, toast]);
   
-  const getLowTrafficRoutes = () => mockRoutes.filter(route => route.trafficStatus === 'low').length;
-  const getModerateTrafficRoutes = () => mockRoutes.filter(route => route.trafficStatus === 'moderate').length;
-  const getHighTrafficRoutes = () => mockRoutes.filter(route => route.trafficStatus === 'high').length;
+  if (!user || user.role !== 'admin') {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-red-600">Access Denied</h1>
+          <p className="text-gray-600 mt-2">You do not have permission to view this page.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold">Loading Dashboard...</h1>
+          <p className="text-gray-600 mt-2">Please wait while we load your data.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-red-600">Error</h1>
+          <p className="text-gray-600 mt-2">{error}</p>
+        </div>
+      </div>
+    );
+  }
   
-  const getTotalVehiclesAnalyzed = () => 
-    mockVideoAnalyses.reduce((total, analysis) => total + analysis.totalCount, 0);
+  const getLowTrafficRoutes = () => routeStats.filter(route => route.trafficStatus === 'low').length;
+  const getModerateTrafficRoutes = () => routeStats.filter(route => route.trafficStatus === 'moderate').length;
+  const getHighTrafficRoutes = () => routeStats.filter(route => route.trafficStatus === 'high').length;
+  const getTotalVehiclesAnalyzed = () => 0; // Keep as 0 for now
   
   return (
     <div className="container mx-auto px-4 py-8">
@@ -82,15 +181,15 @@ export const AdminDashboard = () => {
         </TabsList>
         
         <TabsContent value="overview" className="space-y-6">
-          <TrafficOverview />
+          <TrafficOverview routes={routeStats} />
         </TabsContent>
         
         <TabsContent value="routes" className="space-y-6">
-          <RouteManagement />
+          <RouteManagement routes={routeStats} />
         </TabsContent>
         
         <TabsContent value="analysis" className="space-y-6">
-          <VideoAnalysis />
+          <VideoAnalysis analyses={mockVideoAnalyses} />
         </TabsContent>
       </Tabs>
     </div>

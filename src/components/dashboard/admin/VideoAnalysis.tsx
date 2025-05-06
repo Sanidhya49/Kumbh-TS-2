@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -11,13 +10,14 @@ import { mockVideoAnalyses, mockRoutes } from '@/data/mockData';
 import { useToast } from '@/components/ui/use-toast';
 import { Upload, Camera } from 'lucide-react';
 
-export const VideoAnalysis = () => {
+// Accept analyses as a prop for future real backend integration
+export const VideoAnalysis = ({ analyses }) => {
   const { toast } = useToast();
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedRoute, setSelectedRoute] = useState('');
-  const [videoAnalyses, setVideoAnalyses] = useState(mockVideoAnalyses);
+  const [videoAnalyses, setVideoAnalyses] = useState(analyses);
   
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
