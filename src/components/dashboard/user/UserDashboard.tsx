@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { mockJourneys } from '@/data/mockData';
 import { Journey } from '@/types';
 import { JourneyList } from './JourneyList';
 import { ProfileInfo } from './ProfileInfo';
@@ -10,8 +9,9 @@ import { VehicleList } from './VehicleList';
 import { DashcamUpload } from './DashcamUpload';
 
 export const UserDashboard = () => {
-  const { user, fetchUserVehicles, setUser } = useAuth();
+  const { user, fetchUserVehicles, fetchUserJourneys, setUser } = useAuth();
   const [activeTab, setActiveTab] = useState('profile');
+  const [journeys, setJourneys] = useState<Journey[]>([]);
   
   useEffect(() => {
     if (activeTab === 'vehicles' && user) {
@@ -24,15 +24,24 @@ export const UserDashboard = () => {
         }
       });
     }
+    if (activeTab === 'journeys' && user) {
+      fetchUserJourneys().then(journeys => {
+        setJourneys(journeys);
+        console.log('Fetched journeys:', journeys, 'Current user id:', user.id); // Debug log
+      });
+    }
     // Remove 'user' from dependencies to avoid infinite loop
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeTab, fetchUserVehicles, setUser]);
+  }, [activeTab, fetchUserVehicles, fetchUserJourneys, setUser]);
   
   if (!user) return null;
   
-  // Filter journeys for this user
-  const userJourneys = mockJourneys.filter(journey => journey.userId === user.id);
-  
+  // DEBUG: Show all journeys and log userId comparison
+  journeys.forEach(journey => {
+    console.log('Journey userId:', journey.userId, 'Current user id:', user.id, 'Equal:', journey.userId === user.id);
+  });
+  // Restore filtering logic: compare userId and user.id as trimmed strings
+  const userJourneys = journeys.filter(journey => String(journey.userId).trim() === String(user.id).trim());
   const upcomingJourneys = userJourneys.filter(journey => journey.status === 'upcoming');
   const pastJourneys = userJourneys.filter(journey => journey.status === 'completed');
   

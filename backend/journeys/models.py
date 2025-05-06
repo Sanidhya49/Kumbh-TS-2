@@ -13,7 +13,7 @@ class Journey(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='journeys')
     vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name='journeys')
-    start_location = models.CharField(max_length=2, choices=LOCATIONS)
+    start_location = models.CharField(max_length=100)
     end_location = models.CharField(max_length=2, choices=LOCATIONS)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()

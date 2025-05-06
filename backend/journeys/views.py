@@ -10,4 +10,7 @@ class JourneyViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         if self.request.user.is_admin:
             return Journey.objects.all()
-        return Journey.objects.filter(user=self.request.user) 
+        return Journey.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user) 

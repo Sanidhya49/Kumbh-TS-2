@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { User, Vehicle, VehicleType } from '@/types';
+import { User, Vehicle, VehicleType, Journey } from '@/types';
 import { mockUsers, mockVehicles, mockLogin } from '@/data/mockData';
 import { useToast } from '@/components/ui/use-toast';
 
@@ -11,6 +11,7 @@ interface AuthContextType {
   logout: () => void;
   register: (userData: Omit<User, 'id' | 'role' | 'vehicles'> & { password: string }, vehicle: Omit<Vehicle, 'id' | 'userId' | 'capacity'>) => Promise<boolean>;
   fetchUserVehicles: () => Promise<Vehicle[]>;
+  fetchUserJourneys: () => Promise<Journey[]>;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
@@ -69,11 +70,32 @@ type LoginResponse = {
     last_name: string;
     email: string;
     phone_number: string;
-    aadhaar_number: string;
+    aadhar_number: string;
     license_number: string;
     is_admin: boolean;
   };
   detail?: string;
+};
+
+type JourneyBackend = {
+  id: number | string;
+  user: number | string;
+  vehicle: number | string;
+  start_location: string;
+  end_location: string;
+  start_date: string;
+  end_date: string;
+  number_of_passengers: number;
+  is_approved: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+type PaginatedJourneyResponse = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: JourneyBackend[];
 };
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
@@ -115,6 +137,49 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         capacity: vehicle.max_capacity,
       }));
       return vehicles;
+    }
+    return [];
+  };
+
+  // Helper to fetch journeys for the logged-in user
+  const fetchUserJourneys = async () => {
+    const res = await fetch('http://localhost:8000/api/journeys/', {
+      credentials: 'include',
+    });
+    if (res.ok) {
+      const journeysRaw: unknown = await res.json();
+      let journeysArray: JourneyBackend[] = [];
+      if (Array.isArray(journeysRaw)) {
+        journeysArray = journeysRaw as JourneyBackend[];
+      } else if (
+        journeysRaw &&
+        typeof journeysRaw === 'object' &&
+        'results' in journeysRaw &&
+        Array.isArray((journeysRaw as PaginatedJourneyResponse).results)
+      ) {
+        journeysArray = (journeysRaw as PaginatedJourneyResponse).results;
+      } else {
+        console.error('Journey fetch did not return an array:', journeysRaw);
+        return [];
+      }
+      const journeys = journeysArray.map((journey) => {
+        const now = new Date();
+        const endDate = new Date(journey.end_date);
+        const status: import('@/types').JourneyStatus = endDate < now ? 'completed' : 'upcoming';
+        return {
+          id: String(journey.id),
+          userId: String(journey.user),
+          vehicleId: String(journey.vehicle),
+          startLocation: journey.start_location,
+          endLocation: journey.end_location,
+          startDate: journey.start_date,
+          endDate: journey.end_date,
+          passengers: journey.number_of_passengers,
+          status,
+          bookingDate: journey.created_at,
+        };
+      });
+      return journeys;
     }
     return [];
   };
@@ -189,7 +254,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         fullName: `${responseData.user.first_name} ${responseData.user.last_name}`,
         email: responseData.user.email,
         phone: responseData.user.phone_number,
-        aadhaarNumber: responseData.user.aadhaar_number,
+        aadhaarNumber: responseData.user.aadhar_number,
         licenseNumber: responseData.user.license_number,
         role: responseData.user.is_admin ? 'admin' as const : 'user' as const,
         vehicles: vehicles,
@@ -344,6 +409,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         logout,
         register,
         fetchUserVehicles,
+        fetchUserJourneys,
         setUser,
       }}
     >

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -36,6 +35,15 @@ const journeySchema = z.object({
 });
 
 type JourneyFormValues = z.infer<typeof journeySchema>;
+
+// Add location code mapping for backend
+const locationNameToCode: Record<string, string> = {
+  'Kumbh Mela': 'KM',
+  'Badrinath': 'BD',
+  'Jagannath Yatra': 'JG',
+  'Ujjain': 'UJ',
+  'Kedarnath Mandir': 'KD',
+};
 
 export const JourneyForm = () => {
   const { user } = useAuth();
@@ -98,7 +106,6 @@ export const JourneyForm = () => {
   
   const onSubmit = async (data: JourneyFormValues) => {
     setIsSubmitting(true);
-    
     try {
       // Check if route is available
       if (routeAvailability !== null && routeAvailability <= 0) {
@@ -109,21 +116,66 @@ export const JourneyForm = () => {
         });
         return;
       }
-      
-      // In a real app, we would send this to the server
-      console.log('Journey booked:', data);
-      
-      // Show success message
+
+      // Prepare payload for backend
+      const payload = {
+        vehicle: data.vehicleId,
+        start_location: locationNameToCode[data.startLocation] || data.startLocation,
+        end_location: locationNameToCode[data.endLocation] || data.endLocation,
+        start_date: data.startDate.toISOString(),
+        end_date: data.endDate.toISOString(),
+        number_of_passengers: data.passengers,
+      };
+
+      // Get CSRF token helper (same as in AuthContext)
+      function getCookie(name: string) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+      const csrftoken = getCookie('csrftoken');
+
+      // POST to backend
+      const response = await fetch('http://localhost:8000/api/journeys/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrftoken || '',
+        },
+        credentials: 'include',
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        let errorMsg = 'Could not book journey.';
+        try {
+          const errorData = await response.json();
+          errorMsg = errorData.detail || JSON.stringify(errorData);
+        } catch (e) { /* ignore */ }
+        toast({
+          title: 'Journey Booking Failed',
+          description: errorMsg,
+          variant: 'destructive',
+        });
+        return;
+      }
+
       toast({
-        title: "Journey Booked Successfully",
+        title: 'Journey Booked Successfully',
         description: "Your pilgrimage journey has been booked. You'll receive a confirmation email shortly.",
       });
-      
-      // Wait a bit to show the toast before navigating
       setTimeout(() => {
         navigate('/dashboard');
       }, 1500);
-      
     } finally {
       setIsSubmitting(false);
     }
@@ -158,11 +210,7 @@ export const JourneyForm = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {indianCities.map((city) => (
-                          <SelectItem key={city} value={city}>
-                            {city}
-                          </SelectItem>
-                        ))}
+                        <SelectItem value="Jabalpur">Jabalpur</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
